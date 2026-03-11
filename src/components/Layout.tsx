@@ -81,7 +81,7 @@ const Layout: React.FC = () => {
       <Box sx={{ p: 3 }}>
          <Divider sx={{ borderColor: 'rgba(255,255,255,0.05)', mb: 3 }} />
          <Typography variant="body2" color="text.secondary" align="center">
-           Made with ❤️ for Arantxa & Manu
+           Made with ❤️ | TaskFlowPro
          </Typography>
       </Box>
     </Box>

@@ -56,7 +56,7 @@ const Settings: React.FC = () => {
               </Typography>
 
               {/* Usuario 1 */}
-              <Typography variant="subtitle1" color="primary" sx={{ fontWeight: 700, mb: 2 }}>Usuario 1 (Manu)</Typography>
+              <Typography variant="subtitle1" color="primary" sx={{ fontWeight: 700, mb: 2 }}>Usuario Principal</Typography>
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, mb: 4 }}>
                 <TextField 
                   fullWidth 
@@ -76,7 +76,7 @@ const Settings: React.FC = () => {
               </Box>
 
               {/* Usuario 2 */}
-              <Typography variant="subtitle1" color="secondary" sx={{ fontWeight: 700, mb: 2 }}>Usuario 2 (Arantxa)</Typography>
+              <Typography variant="subtitle1" color="secondary" sx={{ fontWeight: 700, mb: 2 }}>Usuario Secundario</Typography>
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, mb: 4 }}>
                 <TextField 
                   fullWidth 

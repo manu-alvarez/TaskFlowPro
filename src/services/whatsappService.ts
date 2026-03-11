@@ -17,10 +17,10 @@ export const WhatsAppService = {
 
       const recipients = [];
       if (whatsappPhone1 && whatsappApiKey1) {
-        recipients.push({ name: 'Usuario 1 (Manu)', phone: whatsappPhone1, apiKey: whatsappApiKey1 });
+        recipients.push({ name: 'Usuario Principal', phone: whatsappPhone1, apiKey: whatsappApiKey1 });
       }
       if (whatsappPhone2 && whatsappApiKey2) {
-        recipients.push({ name: 'Usuario 2 (Arantxa)', phone: whatsappPhone2, apiKey: whatsappApiKey2 });
+        recipients.push({ name: 'Usuario Secundario', phone: whatsappPhone2, apiKey: whatsappApiKey2 });
       }
 
       if (recipients.length === 0) {
