@@ -20,14 +20,15 @@ jobs:
       - name: Refresh compatible lockfile resolutions
         run: |
           set -euo pipefail
-          npm audit fix --package-lock-only || true
+          npm install react-router-dom@latest vite@latest @vitejs/plugin-react@latest --save
+          npm audit fix --package-lock-only
           npm ci
           npm run build
           npm audit --audit-level=high
       - name: Commit verified lockfile update
         run: |
           set -euo pipefail
-          git add package-lock.json
+          git add package.json package-lock.json
           git diff --cached --check
           if git diff --cached --quiet; then exit 0; fi
           git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'fix(deps): update TaskFlowPro audited lockfile'
