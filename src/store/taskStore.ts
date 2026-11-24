@@ -41,6 +41,8 @@ interface TaskStore {
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   setTasks: (tasks: Task[]) => void;
+  addCategory: (name: string, color: string) => void;
+  deleteCategory: (id: string) => void;
   updateSettings: (updates: Partial<AppSettings>) => void;
 }
 
@@ -88,6 +90,21 @@ export const useTaskStore = create<TaskStore>()(
       })),
 
       setTasks: (tasks) => set({ tasks }),
+
+      addCategory: (name, color) => set((state) => {
+        const safeName = name.trim().slice(0, 40);
+        if (!safeName || !/^#[0-9a-fA-F]{6}$/.test(color) ||
+            state.categories.some(category => category.name.toLocaleLowerCase('es') === safeName.toLocaleLowerCase('es'))) {
+          return state;
+        }
+        return { categories: [...state.categories, { id: crypto.randomUUID(), name: safeName, color, icon: '📁' }] };
+      }),
+
+      deleteCategory: (id) => set((state) => {
+        const protectedIds = ['all', 'edelweiss_care', 'work'];
+        if (protectedIds.includes(id) || state.tasks.some(task => task.categoryId === id)) return state;
+        return { categories: state.categories.filter(category => category.id !== id) };
+      }),
 
       updateSettings: (updates: Partial<AppSettings>) => set((state: TaskStore) => ({
         settings: { ...state.settings, ...updates }
