@@ -7,7 +7,7 @@ Aplicación premium de gestión de tareas construida desde cero priorizando la e
 ## 🚀 Características Principales
 
 - **Gestión Avanzada**: Tablero interactivo con creación y organización de tareas fluida.
-- **Categorización Flexible**: Permite administrar etiquetas o contextos específicos para tus objetivos diarios.
+- **Categorías persistentes**: crear categorías con color, consultar su progreso y eliminar categorías personalizadas vacías. Las categorías predeterminadas y las que contienen tareas quedan protegidas.
 - **Micro-interacciones y UI Premium**: Material UI 3 sumado a Framer Motion aseguran una sensación táctil y premium incomparable.
 - **Notificaciones WhatsApp**: Integración opcional con CallMeBot configurada desde el navegador; requiere credenciales propias y acceso al servicio externo. No existe un servidor de notificaciones push gestionado por el repositorio.
 
