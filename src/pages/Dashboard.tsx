@@ -12,10 +12,9 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const dueToday = tasks.filter(t => t.status !== 'completed' && t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) < tomorrow).length;
-  const overdue = tasks.filter(t => t.status !== 'completed' && t.dueDate && new Date(t.dueDate) < today).length;
+  const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const dueToday = tasks.filter(t => t.status !== 'completed' && t.dueDate?.slice(0, 10) === todayKey).length;
+  const overdue = tasks.filter(t => t.status !== 'completed' && t.dueDate && t.dueDate.slice(0, 10) < todayKey).length;
   const completed = tasks.filter(t => t.status === 'completed').length;
   const inProgress = tasks.filter(t => t.status === 'in_progress').length;
   const urgent = tasks.filter(t => t.status !== 'completed' && t.priority === 'high').length;
@@ -74,7 +73,7 @@ const Dashboard: React.FC = () => {
             variant="contained" 
             color="primary" 
             startIcon={<Plus />}
-            onClick={() => navigate('/tasks')}
+            onClick={() => navigate('/tasks?new=1')}
             sx={{ px: 4, py: 1.5, fontSize: '1rem' }}
           >
             Nueva Tarea
@@ -139,7 +138,7 @@ const Dashboard: React.FC = () => {
               sx={{ p: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
               <Typography>{task.title}</Typography>
               <Typography variant="caption" color="text.secondary">
-                {task.dueDate ? new Date(task.dueDate).toLocaleDateString('es-ES') : 'Sin vencimiento'}
+                {task.dueDate ? task.dueDate.slice(0, 10).split('-').reverse().join('/') : 'Sin vencimiento'}
               </Typography>
             </MotionPaper>
           ))}
