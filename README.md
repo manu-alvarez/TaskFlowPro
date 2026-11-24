@@ -51,7 +51,7 @@ Esto arrojará todos los archivos listos dentro de la carpeta `dist/`. Despliég
 
 - El **repositorio independiente TaskFlowPro** es la fuente de código para el frontend React/Vite. Las carpetas `MSB/apps/taskflow` y otras copias publicadas son artefactos de distribución; no deben modificarse como si fueran la fuente original sin una sincronización explícita.
 - Las tareas y preferencias se conservan en el `localStorage` de cada navegador mediante Zustand `persist`. No existe sincronización entre dispositivos ni backend de cuentas.
-- El Dashboard utiliza las tareas reales guardadas para sus estadísticas y próximos vencimientos; no deben mostrarse ejemplos como datos operativos.
+- El Dashboard utiliza tareas persistidas, prioridades y fechas de vencimiento para estadísticas reales. El botón «Nueva Tarea» abre directamente el formulario; las fechas se guardan como `YYYY-MM-DD` y los indicadores se calculan por fecha local, sin valores demostrativos.
 - Las claves de CallMeBot que se introduzcan en la interfaz quedan almacenadas en el navegador. **No introduzcas credenciales privilegiadas o compartidas**: las variables `VITE_*` y el almacenamiento cliente no son almacenes de secretos.
 
 Pendiente de la fase de aceptación posterior: integración real de CallMeBot y comprobaciones de navegación y persistencia en navegadores.
