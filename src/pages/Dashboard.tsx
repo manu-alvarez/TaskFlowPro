@@ -2,17 +2,32 @@ import React from 'react';
 import { Box, Typography, Grid, Paper, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Flame, CheckCircle2, Clock, Plus, Target } from 'lucide-react';
-
-const stats = [
-  { id: 1, title: 'Tareas Hoy', value: '12', icon: <Target size={24} />, color: '#00F5FF' },
-  { id: 2, title: 'Completadas', value: '8', icon: <CheckCircle2 size={24} />, color: '#00FF66' },
-  { id: 3, title: 'En Progreso', value: '3', icon: <Flame size={24} />, color: '#FF00E4' },
-  { id: 4, title: 'Atrasadas', value: '1', icon: <Clock size={24} />, color: '#FF3366' },
-];
+import { useNavigate } from 'react-router-dom';
+import { useTaskStore } from '../store/taskStore';
 
 const MotionPaper = motion(Paper);
 
-const Dashboard: React.FC = () => {  
+const Dashboard: React.FC = () => {
+  const tasks = useTaskStore(state => state.tasks);
+  const navigate = useNavigate();
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const dueToday = tasks.filter(t => t.status !== 'completed' && t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) < tomorrow).length;
+  const overdue = tasks.filter(t => t.status !== 'completed' && t.dueDate && new Date(t.dueDate) < today).length;
+  const completed = tasks.filter(t => t.status === 'completed').length;
+  const inProgress = tasks.filter(t => t.status === 'in_progress').length;
+  const urgent = tasks.filter(t => t.status !== 'completed' && t.priority === 'high').length;
+  const upcoming = tasks.filter(t => t.status !== 'completed')
+    .sort((a, b) => (a.dueDate || '9999').localeCompare(b.dueDate || '9999') || a.order - b.order)
+    .slice(0, 5);
+  const stats = [
+    { id: 1, title: 'Para hoy', value: dueToday, icon: <Target size={24} />, color: '#00F5FF' },
+    { id: 2, title: 'Completadas', value: completed, icon: <CheckCircle2 size={24} />, color: '#00FF66' },
+    { id: 3, title: 'En progreso', value: inProgress, icon: <Flame size={24} />, color: '#FF00E4' },
+    { id: 4, title: 'Atrasadas', value: overdue, icon: <Clock size={24} />, color: '#FF3366' },
+  ];
   return (
     <Box sx={{ flexGrow: 1, position: 'relative' }}>
       {/* Background Ambient Glow */}
@@ -47,10 +62,10 @@ const Dashboard: React.FC = () => {
         <Box>
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
             <Typography variant="h3" color="text.primary" sx={{ mb: 1 }}>
-              Buen día, <Box component="span" sx={{ color: 'primary.main' }}>Edelweiss</Box> ✨
+              Resumen de <Box component="span" sx={{ color: 'primary.main' }}>tus tareas</Box>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Tienes 4 tareas urgentes para hoy. ¡A por ellas!
+              {urgent > 0 ? `Tienes ${urgent} tareas de prioridad alta pendientes.` : 'No tienes tareas de prioridad alta pendientes.'}
             </Typography>
           </motion.div>
         </Box>
@@ -59,6 +74,7 @@ const Dashboard: React.FC = () => {
             variant="contained" 
             color="primary" 
             startIcon={<Plus />}
+            onClick={() => navigate('/tasks')}
             sx={{ px: 4, py: 1.5, fontSize: '1rem' }}
           >
             Nueva Tarea
@@ -113,28 +129,30 @@ const Dashboard: React.FC = () => {
       <Grid container spacing={3} sx={{ position: 'relative', zIndex: 1 }}>
         <Grid item xs={12} lg={8}>
           <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>Próximas Tareas</Typography>
-          {/* Mock Task List */}
-          {[1,2,3].map((task, i) => (
-             <MotionPaper
-              key={task}
+          {upcoming.length === 0 ? (
+            <Typography color="text.secondary">No hay tareas pendientes. Crea una desde Tareas.</Typography>
+          ) : upcoming.map((task, i) => (
+            <MotionPaper key={task.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.4 + (i * 0.1) }}
-              sx={{ p: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-             >
-               <Typography>Ejemplo de Tarea {task}</Typography>
-             </MotionPaper>
+              transition={{ duration: 0.3, delay: 0.15 + i * 0.07 }}
+              sx={{ p: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+              <Typography>{task.title}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {task.dueDate ? new Date(task.dueDate).toLocaleDateString('es-ES') : 'Sin vencimiento'}
+              </Typography>
+            </MotionPaper>
           ))}
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>Atajos UI</Typography>
+          <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>Acciones</Typography>
           <MotionPaper
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.6 }}
             sx={{ p: 3, textAlign: 'center' }}
            >
-            <Typography variant="body2" color="text.secondary">Widgets Próximamente</Typography>
+            <Button variant="outlined" fullWidth onClick={() => navigate('/tasks')}>Gestionar tareas</Button>
           </MotionPaper>
         </Grid>
       </Grid>
